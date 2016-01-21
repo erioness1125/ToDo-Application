@@ -5,4 +5,5 @@
     <string name="editItemBelowLabel">Edit Item Below:</string>
     <string name="btnSave">Save</string>
     <string name="hntTypeHere" />
+    <string name="btnAdd">Add</string>
 </resources>

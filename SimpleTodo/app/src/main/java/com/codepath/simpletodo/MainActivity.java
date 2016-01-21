@@ -27,6 +27,7 @@ public class MainActivity extends AppCompatActivity {
     ArrayList<String> items;
     ArrayAdapter<String> itemsAdapter;
     ListView lvItems;
+    private final int REQUEST_CODE = 20;
     /**
      * ATTENTION: This was auto-generated to implement the App Indexing API.
      * See https://g.co/AppIndexing/AndroidStudio for more information.
@@ -42,8 +43,6 @@ public class MainActivity extends AppCompatActivity {
         readItems();
         itemsAdapter = new ArrayAdapter<>(this, R.layout.support_simple_spinner_dropdown_item, items);
         lvItems.setAdapter(itemsAdapter);
-        items.add("First Item");
-        items.add("Second Item");
         setupListViewListener();
         // ATTENTION: This was auto-generated to implement the App Indexing API.
         // See https://g.co/AppIndexing/AndroidStudio for more information.
@@ -67,7 +66,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 String originalItem = items.get(position).toString();
-                launchEditItemActivity(originalItem);
+                launchEditItemActivity(position, originalItem);
             }
         });
     }
@@ -122,12 +121,28 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    public void launchEditItemActivity(String originalItem) {
+    public void launchEditItemActivity(int position, String originalItem) {
         // first parameter is the context, second is the class of the activity to launch
         Intent i = new Intent(MainActivity.this, EditItemActivity.class);
         // put "extras" into the bundle for access in the second activity
         i.putExtra("originalItem", originalItem);
-        startActivity(i); // brings up the second activity
+        i.putExtra("position", position);
+        startActivityForResult(i, REQUEST_CODE); // brings up the second activity
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (resultCode == RESULT_OK && requestCode == REQUEST_CODE) {
+            // Extract name value from result extras
+            String editedItem = data.getExtras().getString("editedItem");
+            int position = data.getIntExtra("position", -1);
+
+            if (position != -1) {
+                items.set(position, editedItem);
+                itemsAdapter.notifyDataSetChanged();
+                writeItems();
+            }
+        }
     }
 
     @Override
