@@ -37,7 +37,7 @@ GIF created with [LiceCap](http://www.cockos.com/licecap/).
 
 ## Notes
 
-Describe any challenges encountered while building the app.
+This is my first android app ever. Everything was new to me so that I took a long time, but it was the interesting work. Creating the custom adapter was the most difficult among all the finished features.
 
 ## License
 
