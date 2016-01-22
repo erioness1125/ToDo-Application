@@ -82,8 +82,8 @@ public class MainActivity extends AppCompatActivity {
 
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                String originalItem = items.get(position).toString();
-                launchEditItemActivity(position, originalItem);
+                Todos t = items.get(position);
+                launchEditItemActivity(position, t.value);
             }
         });
     }

@@ -89,7 +89,7 @@ public class TodosDatabaseHelper extends SQLiteOpenHelper {
             values.put(KEY_TODO_ID, todo.id);
 
             // First try to update the item in case that already exists in the database
-            int rows = db.update(TABLE_TODOS, values, KEY_TODO_VALUE + "= ?", new String[]{String.valueOf(todo.value)});
+            int rows = db.update(TABLE_TODOS, values, KEY_TODO_ID + "= ?", new String[]{String.valueOf(todo.id)});
 
             // Check if update succeeded
             if (rows == 1) {
