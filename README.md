@@ -25,7 +25,7 @@ The following **optional** features are implemented:
 
 The following **additional** features are implemented:
 
-* [ ] List anything else that you can get done to improve the app functionality!
+* [x] Show an alert message if the user hits the "Add" button when no item(text) is entered
 
 ## Video Walkthrough 
 
