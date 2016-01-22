@@ -11,23 +11,32 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.ListView;
+import android.widget.Toast;
+
+import com.codepath.simpletodo.sqlite.TodosDatabaseHelper;
+import com.codepath.simpletodo.sqlite.models.Todos;
+import com.codepath.simpletodo.customadapters.TodosAdapter;
 
 import com.google.android.gms.appindexing.Action;
 import com.google.android.gms.appindexing.AppIndex;
 import com.google.android.gms.common.api.GoogleApiClient;
 
-import org.apache.commons.io.FileUtils;
-
-import java.io.File;
-import java.io.IOException;
 import java.util.ArrayList;
+import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
 
-    ArrayList<String> items;
-    ArrayAdapter<String> itemsAdapter;
+    ArrayList<Todos> items;
+    ArrayAdapter<Todos> itemsAdapter;
     ListView lvItems;
+    TodosDatabaseHelper dbHelper;
+
     private final int REQUEST_CODE = 20;
+    private int idx = 0; // storing the last KEY_TODO_ID value
+
+    private final String ACTION_ADD = "add";
+    private final String ACTION_DELETE = "delete";
+
     /**
      * ATTENTION: This was auto-generated to implement the App Indexing API.
      * See https://g.co/AppIndexing/AndroidStudio for more information.
@@ -40,10 +49,17 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.content_main);
         lvItems = (ListView) findViewById(R.id.lvItems);
         items = new ArrayList<>();
-        readItems();
-        itemsAdapter = new ArrayAdapter<>(this, R.layout.support_simple_spinner_dropdown_item, items);
+
+        // Get singleton instance of database
+        dbHelper = TodosDatabaseHelper.getInstance(this);
+        // Initialize ArrayList:items
+        List<Todos> todos = dbHelper.getAllTodos();
+        readItems(todos);
+
+        itemsAdapter = new TodosAdapter(this, items);
         lvItems.setAdapter(itemsAdapter);
         setupListViewListener();
+
         // ATTENTION: This was auto-generated to implement the App Indexing API.
         // See https://g.co/AppIndexing/AndroidStudio for more information.
         client = new GoogleApiClient.Builder(this).addApi(AppIndex.API).build();
@@ -54,9 +70,10 @@ public class MainActivity extends AppCompatActivity {
 
             @Override
             public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
+                Todos t = items.get(position);
                 items.remove(position);
                 itemsAdapter.notifyDataSetChanged();
-                writeItems();
+                writeItems(ACTION_DELETE, t);
                 return true;
             }
         });
@@ -96,28 +113,32 @@ public class MainActivity extends AppCompatActivity {
     public void onAddItem(View view) {
         EditText etNewItem = (EditText) findViewById(R.id.etAddItem);
         String itemText = etNewItem.getText().toString();
-        itemsAdapter.add(itemText);
-        etNewItem.setText("");
-        writeItems();
-    }
-
-    private void readItems() {
-        File filesDir = getFilesDir();
-        File todoFile = new File(filesDir, "todo.txt");
-        try {
-            items = new ArrayList<>(FileUtils.readLines(todoFile));
-        } catch (IOException e) {
-            items = new ArrayList<>();
+        if (itemText == null || itemText.trim().isEmpty())
+            Toast.makeText(this, "Item should not be empty!", Toast.LENGTH_SHORT).show();
+        else {
+            Todos t = new Todos(++idx, itemText);
+            itemsAdapter.add(t);
+            etNewItem.setText("");
+            writeItems(ACTION_ADD, t);
         }
     }
 
-    private void writeItems() {
-        File filesDir = getFilesDir();
-        File todoFile = new File(filesDir, "todo.txt");
-        try {
-            FileUtils.writeLines(todoFile, items);
-        } catch (IOException e) {
-            e.printStackTrace();
+    private void readItems(List<Todos> todos) {
+        for (Todos t : todos) {
+            items.add(t);
+            if ( idx == 0 || (idx <= t.id) )
+                idx = t.id;
+        }
+    }
+
+    private void writeItems(String action, Todos t) {
+        if (dbHelper != null && t != null) {
+            if (ACTION_ADD.equalsIgnoreCase(action)) {
+                dbHelper.addOrUpdateTodo(t);
+
+            } else if (ACTION_DELETE.equalsIgnoreCase(action)) {
+                dbHelper.deleteTodos(t.id);
+            }
         }
     }
 
@@ -138,9 +159,11 @@ public class MainActivity extends AppCompatActivity {
             int position = data.getIntExtra("position", -1);
 
             if (position != -1) {
-                items.set(position, editedItem);
+                Todos t = items.get(position);
+                t.value = editedItem;
+                items.set(position, t);
                 itemsAdapter.notifyDataSetChanged();
-                writeItems();
+                writeItems(ACTION_ADD, t);
             }
         }
     }

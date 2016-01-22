@@ -6,4 +6,6 @@
     <string name="btnSave">Save</string>
     <string name="hntTypeHere" />
     <string name="btnAdd">Add</string>
+    <string name="default_todo_id">-1</string>
+    <string name="default_todo_value">empty</string>
 </resources>
