@@ -112,9 +112,11 @@ public class MainActivity extends AppCompatActivity {
 
     public void onAddItem(View view) {
         EditText etNewItem = (EditText) findViewById(R.id.etAddItem);
-        String itemText = etNewItem.getText().toString();
-        if (itemText == null || itemText.trim().isEmpty())
-            Toast.makeText(this, "Item should not be empty!", Toast.LENGTH_SHORT).show();
+        String itemText = etNewItem.getText().toString().trim(); // getText() will not return null, so it's safe from NullPointerException
+        if (itemText == null || itemText.isEmpty()) {
+            Toast.makeText(this, "Title " + getResources().getString(R.string.err_should_not_be_empty), Toast.LENGTH_SHORT).show();
+            etNewItem.setText("");
+        }
         else {
             Todos t = new Todos(++idx, itemText);
             itemsAdapter.add(t);

@@ -9,14 +9,34 @@
     android:paddingTop="@dimen/activity_vertical_margin"
     tools:context="com.codepath.simpletodo.EditItemActivity">
 
-    <EditText
+    <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:inputType="textMultiLine"
-        android:ems="10"
-        android:id="@+id/etEditItem"
+        android:text="@string/txt_save"
+        android:id="@+id/btnEdit"
+        android:onClick="onSubmit"
+        android:layout_alignParentBottom="true"
+        android:layout_toRightOf="@+id/btnCancel"
+        android:layout_toEndOf="@+id/btnCancel" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:text="@string/txt_edit"
+        android:id="@+id/tvEdit"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:textStyle="bold" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:text="@string/lbl_title"
+        android:id="@+id/tvTitle"
         android:layout_marginTop="30dp"
-        android:hint="@string/hntTypeHere"
         android:layout_below="@+id/tvEdit"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true" />
@@ -24,21 +44,60 @@
     <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/btnSave"
-        android:id="@+id/btnEdit"
-        android:layout_marginTop="30dp"
-        android:layout_below="@+id/etEditItem"
+        android:text="@string/txt_cancel"
+        android:id="@+id/btnCancel"
+        android:layout_alignParentBottom="true"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
-        android:onClick="onSubmit" />
+        android:onClick="onCancel" />
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textAppearance="?android:attr/textAppearanceLarge"
-        android:text="@string/editItemBelowLabel"
-        android:id="@+id/tvEdit"
-        android:layout_alignParentTop="true"
+        android:id="@+id/tvOriginalItem"
+        android:lines="@integer/tv_lines_3"
+        android:layout_below="@+id/tvTitle"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:text="@string/lbl_date"
+        android:id="@+id/tvDate"
+        android:layout_centerVertical="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true" />
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/txt_edit"
+        android:id="@+id/btnTitleEdit"
+        android:onClick="showTitleDialog"
+        android:layout_below="@+id/tvTitle"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true" />
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/txt_edit"
+        android:id="@+id/btnDateEdit"
+        android:layout_alignTop="@+id/tvOriginalDate"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true"
+        android:onClick="showDateDialog" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:id="@+id/tvOriginalDate"
+        android:layout_below="@+id/tvDate"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true" />
+
 </RelativeLayout>
