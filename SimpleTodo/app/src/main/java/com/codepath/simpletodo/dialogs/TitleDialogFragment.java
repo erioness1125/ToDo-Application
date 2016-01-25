@@ -7,13 +7,10 @@ import android.app.DialogFragment;
 import android.content.DialogInterface;
 import android.os.Bundle;
 import android.text.InputType;
-import android.view.KeyEvent;
-import android.view.inputmethod.EditorInfo;
 import android.widget.EditText;
 import android.widget.LinearLayout;
-import android.widget.TextView;
 
-public class TitleDialogFragment extends DialogFragment implements TextView.OnEditorActionListener {
+public class TitleDialogFragment extends DialogFragment {
 
     private EditText input;
     private String originalItem;
@@ -75,17 +72,5 @@ public class TitleDialogFragment extends DialogFragment implements TextView.OnEd
         });
 
         return alertDialogBuilder.create();
-    }
-
-    @Override
-    public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
-        if (EditorInfo.IME_ACTION_DONE == actionId) {
-            // Return input text to activity
-            TitleDialogListener listener = (TitleDialogListener) getActivity();
-            listener.onFinishEditDialog(input.getText().toString());
-            dismiss();
-            return true;
-        }
-        return false;
     }
 }

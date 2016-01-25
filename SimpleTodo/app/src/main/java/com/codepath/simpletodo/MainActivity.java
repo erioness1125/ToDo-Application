@@ -83,7 +83,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 Todos t = items.get(position);
-                launchEditItemActivity(position, t.value);
+                launchEditItemActivity(position, t.value, t.dueDate);
             }
         });
     }
@@ -118,7 +118,8 @@ public class MainActivity extends AppCompatActivity {
             etNewItem.setText("");
         }
         else {
-            Todos t = new Todos(++idx, itemText);
+            // due date is automatically set to the current date
+            Todos t = new Todos(++idx, itemText, System.currentTimeMillis());
             itemsAdapter.add(t);
             etNewItem.setText("");
             writeItems(ACTION_ADD, t);
@@ -144,11 +145,12 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    public void launchEditItemActivity(int position, String originalItem) {
+    public void launchEditItemActivity(int position, String originalItem, long originalDueDate) {
         // first parameter is the context, second is the class of the activity to launch
         Intent i = new Intent(MainActivity.this, EditItemActivity.class);
         // put "extras" into the bundle for access in the second activity
         i.putExtra("originalItem", originalItem);
+        i.putExtra("originalDueDate", originalDueDate);
         i.putExtra("position", position);
         startActivityForResult(i, REQUEST_CODE); // brings up the second activity
     }
@@ -158,11 +160,13 @@ public class MainActivity extends AppCompatActivity {
         if (resultCode == RESULT_OK && requestCode == REQUEST_CODE) {
             // Extract name value from result extras
             String editedItem = data.getExtras().getString("editedItem");
+            long editedDueDate = data.getExtras().getLong("editedDate");
             int position = data.getIntExtra("position", -1);
 
             if (position != -1) {
                 Todos t = items.get(position);
                 t.value = editedItem;
+                t.dueDate = editedDueDate;
                 items.set(position, t);
                 itemsAdapter.notifyDataSetChanged();
                 writeItems(ACTION_ADD, t);

@@ -15,4 +15,10 @@
         android:layout_height="wrap_content"
         android:text="@string/default_todo_value"
         android:id="@+id/tvTodoValue" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/default_todo_due_date"
+        android:id="@+id/tvTodoDueDate" />
 </LinearLayout>

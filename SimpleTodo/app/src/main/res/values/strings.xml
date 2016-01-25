@@ -4,6 +4,7 @@
 
     <string name="default_todo_id">-1</string>
     <string name="default_todo_value">empty</string>
+    <string name="default_todo_due_date">0</string>
 
     <string name="err_should_not_be_empty">Item should not be empty!</string>
 

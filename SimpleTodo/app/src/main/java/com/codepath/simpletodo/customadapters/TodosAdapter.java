@@ -10,7 +10,9 @@ import android.widget.TextView;
 import com.codepath.simpletodo.R;
 import com.codepath.simpletodo.sqlite.models.Todos;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 
 public class TodosAdapter extends ArrayAdapter<Todos> {
 
@@ -30,10 +32,15 @@ public class TodosAdapter extends ArrayAdapter<Todos> {
         // Lookup view for data population
         TextView tvTodoId = (TextView) convertView.findViewById(R.id.tvTodoId);
         TextView tvTodoValue = (TextView) convertView.findViewById(R.id.tvTodoValue);
+        TextView tvTodoDueDate = (TextView) convertView.findViewById(R.id.tvTodoDueDate);
 
         // Populate the data into the template view using the data object
         tvTodoId.setText(String.valueOf(t.id));
         tvTodoValue.setText(t.value);
+
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy/MM/dd");
+        String date = sdf.format(new Date(t.dueDate));
+        tvTodoDueDate.setText("Ends: " + date);
 
         // Return the completed view to render on screen
         return convertView;

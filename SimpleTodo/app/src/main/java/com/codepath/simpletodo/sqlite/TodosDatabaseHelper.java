@@ -15,14 +15,15 @@ import java.util.List;
 public class TodosDatabaseHelper extends SQLiteOpenHelper {
     // Database Info
     private static final String DATABASE_NAME = "simpleTodoDB";
-    private static final int DATABASE_VERSION = 1;
+    private static final int DATABASE_VERSION = 2;
 
     // Table Name
     private static final String TABLE_TODOS = "t_todos";
 
-    // Table Column
+    // Table Columns
     private static final String KEY_TODO_ID = "c_id";
     private static final String KEY_TODO_VALUE = "c_value";
+    private static final String KEY_TODO_DUEDATE = "c_duedate";
 
     private static final String ERR_TAG = "ERROR";
 
@@ -58,7 +59,8 @@ public class TodosDatabaseHelper extends SQLiteOpenHelper {
         String CREATE_POSTS_TABLE = "CREATE TABLE " + TABLE_TODOS +
                 "(" +
                 KEY_TODO_ID + " INTEGER PRIMARY KEY," + // Define a primary key
-                KEY_TODO_VALUE + " TEXT" +
+                KEY_TODO_VALUE + " TEXT," +
+                KEY_TODO_DUEDATE + " INTEGER" +
                 ")";
 
         db.execSQL(CREATE_POSTS_TABLE);
@@ -85,6 +87,7 @@ public class TodosDatabaseHelper extends SQLiteOpenHelper {
 
         try {
             ContentValues values = new ContentValues();
+            values.put(KEY_TODO_DUEDATE, todo.dueDate);
             values.put(KEY_TODO_VALUE, todo.value);
             values.put(KEY_TODO_ID, todo.id);
 
@@ -131,7 +134,8 @@ public class TodosDatabaseHelper extends SQLiteOpenHelper {
                 do {
                     Todos singleTodo = new Todos(
                             cursor.getInt( cursor.getColumnIndex(KEY_TODO_ID) ),
-                            cursor.getString( cursor.getColumnIndex(KEY_TODO_VALUE))
+                            cursor.getString( cursor.getColumnIndex(KEY_TODO_VALUE)),
+                            cursor.getLong(cursor.getColumnIndex(KEY_TODO_DUEDATE))
                     );
                     todos.add(singleTodo);
                 } while(cursor.moveToNext());
@@ -153,6 +157,7 @@ public class TodosDatabaseHelper extends SQLiteOpenHelper {
 
         ContentValues values = new ContentValues();
         values.put(KEY_TODO_VALUE, todos.value);
+        values.put(KEY_TODO_DUEDATE, todos.dueDate);
 
         // Updating profile picture url for user with that userName
         return db.update(TABLE_TODOS, values, KEY_TODO_ID + " = ?",
